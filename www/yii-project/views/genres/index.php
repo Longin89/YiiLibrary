@@ -6,7 +6,7 @@ use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 
-$this->title = 'My Books Database';
+$this->title = 'Список жанров';
 ?>
 <div class="site-index">
 

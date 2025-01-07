@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Books */
 
-$this->title = 'Редактировать автора';
+$this->title = 'Редактировать жанр';
 ?>
 <h1 class="fw-semibold">Редактировать жанр</h1>
 
