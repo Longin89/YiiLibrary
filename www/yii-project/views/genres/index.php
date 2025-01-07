@@ -25,7 +25,7 @@ $this->title = 'My Books Database';
         Наименование жанра
       </label>
       <?php
-      echo Html::textInput('genre_name', '', ['class' => 'form-control col-sm-10', 'placeholder' => 'Наименование жанра']);
+      echo Html::textInput('genre_name', '', ['class' => 'form-control col-sm-10 mb-3', 'placeholder' => 'Наименование жанра']);
       ?>
       <div class="form-group text-center">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success mx-2 mt-1']) ?>
