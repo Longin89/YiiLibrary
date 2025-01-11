@@ -37,17 +37,15 @@ class m241226_071602_books_table_seed extends Migration
             ]);
         }
 
+
         // Добавляем связь между книгами и авторами
 
-        $books = $this->db->createCommand('SELECT id FROM {{%books}}')->queryAll();
-        $authors = $this->db->createCommand('SELECT id FROM {{%authors}}')->queryAll();
+        for ($j = 1; $j <= 25; $j++) {
 
-        foreach ($books as $book) {
-            $linkCount = rand(1, 2);
-            for ($j = 0; $j < $linkCount; $j++) {
-                $authorId = $faker->randomElement($authors)['id'];
-                $this->insert('{{%links}}', ['book_id' => $book['id'], 'author_id' => $authorId]);
-            }
+            $this->insert('{{%links}}', [
+                'book_id' => $j,
+                'author_id' => rand(1, 9)
+            ]);
         }
     }
 }
