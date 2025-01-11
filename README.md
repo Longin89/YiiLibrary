@@ -1,71 +1,122 @@
-Yii in Docker Template
-======================
+# Yii Library
 
-Template for quick start working with yii in docker container on local server.
+Данный контейнер содержит в себе приложение, позволяющее проводить CRUD-операции с базой данных книг.
+Приложение запускается в докер-контейнере и имеет пошаговую инструкцию.
 
-Get this template
------------------
+Проект так-же оснащен PHPMyAdmin для удобного просмотра архитектуры БД (после установки зависимостей будет находиться по адресу ```http://localhost:8080```).
 
-```shell
-git clone https://github.com/AndrewDanilov/docker-yii2.git docker-yii2
-```
+## 0. Подготовка
+Находясь в папке, в которую Вы хотите скачать проект, клонируем репозиторий с помощью команды:
 
-Start Docker Compose
---------------------
+```git clone git@github.com:Longin89/YiiLibrary.git```
 
-```shell
-cd docker-yii2
-docker compose up -d
-```
+После этого, переходим в папку проекта:
 
-Install Yii2
-------------
+```cd YiiLibrary-main```
 
-You need to run the following commands from the console of the yii_php container. To start bash within docker container, use the command:
+## 1. Установка
+Для начала нужно скачать все необходимое для контейнера командой:
 
-```shell
-docker exec -it yii_php bash
-```
+```docker-compose build```
 
-Run yii installation with container console:
+После этого запустить сервисы с помощью:
 
-```shell
-composer create-project --prefer-dist yiisoft/yii2-app-advanced yii-project
-```
+```docker-compose up -d```
 
-Change current directory to project root:
+Затем зайти в консоль контейнера:
 
-```shell
-cd yii-project
-```
+```docker exec -it yii_php bash```
 
-Initialize yii:
+В папку проекта:
 
-```shell
-php init
-```
+```cd yii-project``` 
 
-Before using the database and migration, you need to configure the database configuration. In /common/config/main-local.php find this section:
+Чтобы установить зависимости командой:
 
-```php
-'components' => [
-    'db' => [
-        'class' => \yii\db\Connection::class,
-        'dsn' => 'mysql:host=yii_mysql;dbname=yii',
-        'username' => 'yii',
-        'password' => 'yii',
-        'charset' => 'utf8',
-    ],
-```
+```composer install```
 
-Change `host` from `localhost` to `yii_mysql`, dbname, username and password set to `yii`, 
+После завершения установки в браузерной строке нужно перейти по адресу:
 
-Then you can run migrations:
+http://localhost
 
-```shell
-php yii migrate
-```
+Чтобы убедиться, что все зависимости установлены
 
-Now you can open your app via:
+![Yii](screenshots/1.png)
 
-http://localhost/ and http://admin.localhost/
+#### Внимание: если страница Yii не отображается - проверьте наличие полных прав на папку проекта и обновите страницу.
+В Ubuntu, например, самый простой способ это сделать - ввести команду:
+
+```sudo chmod -R 777 '/папка_проекта/'```
+
+Стоит заметить, что после этого приложение еще не готово к работе, т.к. не проведена миграция БД.
+
+## 2. Миграция базы данных и сидирование
+В проект интегрирована миграция базы данных, а так-же сидеры для ее наполнения, чтобы запустить их - введите команду и подтвердите миграцию:
+
+```php yii migrate/up```
+
+![Migrate](screenshots/2.png)
+
+После завершения процесса миграции будет выведено соответствующее сообщение:
+
+![Migrate_successful](screenshots/3.png)
+
+После этого приложение готово к работе.
+
+## 3.1 Книги (таблица)
+
+Таблица книг содержит информацию о ID, названии, годе выпуска, авторе(ах), жанре, а так-же имеет кнопки удаления книги или обновления ее данных. 
+
+![Books_table](screenshots/4.png)
+
+Согласно ТЗ имеется пагинация - 10 книг на страницу.
+
+Помимо этого здесь-же присутствует фильтрация и сортировка по ID(по умолчанию), названию и году издания.
+
+![Books_filter](screenshots/5.png)
+
+Отфильтрованные книги могут по необходимости сортироваться в нужном порядке.
+Кнопка ```Сбросить``` приводит таблицу к первоначальному виду.
+
+## 3.2 Книги (добавление)
+
+![Book_create](screenshots/6.png)
+
+При нажатии на кнопку ```Добавить книгу``` открывается страница с соответствующей формой.
+Все поля обязательны для заполнения. Жанр и авторы загружаются непосредственно из бд, поэтому доступны в виде выпадающего списка и чекбоксов.
+После добавления книги в бд будет выведено соответствующее сообщение.
+Проверить наличие новой книги можно в таблице, на счетчике общего количества книг или в PHPMyAdmin.
+
+![Book_created](screenshots/7.png)
+
+## 3.3 Книги (обновление)
+
+При нажатии на кнопку ```Обновить``` открывается страница с формой и загруженной информацией о книге.
+
+![Book_update](screenshots/8.png)
+
+Действия аналогичны созданию новой книги. После обновления будет выведено соответствующее сообщение.
+
+![Book_updated](screenshots/9.png)
+
+## 3.4 Книги (удаление)
+
+При нажатии кнопки ```Удалить``` будет запрошено подтверждение действия:
+
+![Book_delete](screenshots/10.png)
+
+После которого будет выведено соответствующее подтверждение:
+
+![Book_deleted](screenshots/11.png)
+
+## 4. Авторы
+
+![Authors](screenshots/12.png)
+
+Функционал по добавлению авторов представляет собой упрощенную вариацию добавления книг.
+
+## 4. Жанры
+
+Функционал по добавлению жанров так-же представляет собой упрощенную вариацию добавления книг.
+
+![Genres](screenshots/13.png)
