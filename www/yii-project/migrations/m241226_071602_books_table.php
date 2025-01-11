@@ -29,7 +29,6 @@ class m241226_071602_books_table extends Migration
             'last_name' => $this->string()->notNull(),
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci');
 
-        $this->createIndex('authors_first_name_index', 'authors', ['first_name']);
         $this->createIndex('authors_last_name_index', 'authors', ['last_name']);
 
 
@@ -44,22 +43,15 @@ class m241226_071602_books_table extends Migration
             'id' => $this->primaryKey(),
             'book_id' => $this->integer()->notNull(),
             'author_id' => $this->integer()->notNull(),
+            'FOREIGN KEY (book_id) REFERENCES {{%books}} (id)',
+            'FOREIGN KEY (author_id) REFERENCES {{%authors}} (id)',
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci');
 
         $this->addForeignKey(
-            'fk_links_books',
-            '{{%links}}',
-            ['book_id'],
+            'fk_books_genres',
             '{{%books}}',
-            ['id'],
-            'CASCADE'
-        );
-
-        $this->addForeignKey(
-            'fk_links_authors',
-            '{{%links}}',
-            ['author_id'],
-            '{{%authors}}',
+            ['genre_id'],
+            '{{%genres}}',
             ['id'],
             'CASCADE'
         );
@@ -72,7 +64,6 @@ class m241226_071602_books_table extends Migration
     {
         $this->dropIndex('books_year_index', 'books');
         $this->dropIndex('books_title_index', 'books');
-        $this->dropIndex('authors_first_name_index', 'authors');
         $this->dropIndex('authors_last_name_index', 'authors');
         $this->dropIndex('genres_genre_name_index', 'genres');
         $this->dropTable('books');
