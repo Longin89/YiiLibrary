@@ -7,7 +7,7 @@ use yii\helpers\Url;
 /** @var string $first_name */
 /** @var string $last_name */
 
-$this->title = 'My Books Database';
+$this->title = 'Добавить автора';
 ?>
 <div class="site-index">
 

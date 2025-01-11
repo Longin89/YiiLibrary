@@ -8,6 +8,7 @@ class m241226_071602_books_table_seed extends Migration
     public function safeUp()
     {
         $faker = Factory::create();
+        $booksQty = 25;
 
         // Добавляем жанры
 
@@ -20,7 +21,7 @@ class m241226_071602_books_table_seed extends Migration
 
         // Добавляем книги с существующими жанрами
 
-        for ($i = 0; $i < 25; $i++) {
+        for ($i = 0; $i < $booksQty; $i++) {
             $this->insert('{{%books}}', [
                 'title' => $faker->sentence,
                 'genre_id' => $faker->randomElement($genres),
@@ -39,15 +40,12 @@ class m241226_071602_books_table_seed extends Migration
 
         // Добавляем связь между книгами и авторами
 
-        $books = $this->db->createCommand('SELECT id FROM {{%books}}')->queryAll();
-        $authors = $this->db->createCommand('SELECT id FROM {{%authors}}')->queryAll();
+        for ($j = 1; $j <= $booksQty; $j++) {
 
-        foreach ($books as $book) {
-            $linkCount = rand(1, 2);
-            for ($j = 0; $j < $linkCount; $j++) {
-                $authorId = $faker->randomElement($authors)['id'];
-                $this->insert('{{%links}}', ['book_id' => $book['id'], 'author_id' => $authorId]);
-            }
+            $this->insert('{{%links}}', [
+                'book_id' => $j,
+                'author_id' => rand(1, 9)
+            ]);
         }
     }
 }
